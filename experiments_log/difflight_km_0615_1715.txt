@@ -1,0 +1,15 @@
+[17:15:03] ============================================================
+[17:15:03] PIPELINE DIFFLIGHT (Kriging Missing) — 4 run(s) planifié(s)
+[17:15:03] Log : experiments_log/difflight_km_0615_1715.txt
+[17:15:03] ============================================================
+[17:15:03] 
+────────────────────────────────────────────────────────────
+[17:15:03] Run 1/4 : Hangzhou - KM 1200.00%  (memo=DiffLight_Hangzhou_KM_12)
+[17:15:03] ────────────────────────────────────────────────────────────
+[17:15:03] Commande : python run_difflight.py -mod DiffLight -gen 1 -workers 3 -memo DiffLight_Hangzhou_KM_12 -missing_pattern km_wn_12 -hangzhou_1
+[17:16:43] ✗ ÉCHEC (code 255) — durée 00h 01m 39s
+[17:16:43] 
+────────────────────────────────────────────────────────────
+[17:16:43] Run 2/4 : Hangzhou - KM 2500.00%  (memo=DiffLight_Hangzhou_KM_25)
+[17:16:43] ────────────────────────────────────────────────────────────
+[17:16:43] Commande : python run_difflight.py -mod DiffLight -gen 1 -workers 3 -memo DiffLight_Hangzhou_KM_25 -missing_pattern km_wn_25 -hangzhou_1

@@ -5,7 +5,8 @@ from torch.multiprocessing import Process
 import argparse
 import os
 from summary import summary_detail_RL
-
+import torch
+torch.set_num_threads(1)
 # os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 def parse_args():
@@ -18,6 +19,7 @@ def parse_args():
     parser.add_argument("-gen",        type=int,            default=1)
     parser.add_argument("-multi_process", action="store_true", default=False)
     parser.add_argument("-workers",    type=int,            default=3)
+    parser.add_argument("-load_memo", type=str, default=None, help="Memo of the pretrained model to load")
 
     # evaluation
     parser.add_argument(
@@ -43,7 +45,7 @@ def parse_args():
     parser.add_argument(
         "-reward",
         type=float,
-        default=1.0,
+        default=0.0,
         help="the reward for the model to be achieved, 0.0 means the best reward",
     )
     parser.add_argument(
@@ -183,8 +185,10 @@ def main(in_args=None):
             time_str = time.strftime('%m_%d_%H_%M_%S', time.localtime(time.time()))
         print(time_str)
 
+        load_memo_name = in_args.load_memo if in_args.load_memo else in_args.memo
+
         dic_path_extra = {
-            "PATH_TO_MODEL": os.path.join("checkpoints", in_args.memo, template, traffic_file, time_str),
+            "PATH_TO_MODEL": os.path.join("checkpoints", load_memo_name, template, traffic_file, time_str),
             "PATH_TO_WORK_DIRECTORY": os.path.join("records", in_args.memo, template, traffic_file, time_str),
             "PATH_TO_DATA": os.path.join("data", template, str(road_net)),
             "PATH_TO_ERROR": os.path.join("errors", in_args.memo, template),
@@ -193,7 +197,7 @@ def main(in_args=None):
 
         deploy_dic_agent_conf_extra = {
             "LEARNING_RATE": 2e-4,
-            "BATCH_SIZE": 64 if template != "newyork_16_3" else 24,
+            "BATCH_SIZE": 64 if template != "newyork_16_3" else 16,
             "NORMAL_FACTOR": -100 if template != "newyork_16_3" else -50,
             "EPOCHS": 1,
             "BLOCK_DEPTH": 1,

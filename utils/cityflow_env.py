@@ -311,6 +311,10 @@ class Intersection:
         dic_feature["lane_num_vehicle_in"] = self._get_lane_num_vehicles(self.list_entering_lanes)
         dic_feature["lane_num_vehicle_out"] = self._get_lane_num_vehicles(self.list_exiting_lanes)
 
+
+
+        
+
         self.dic_feature = dic_feature
 
     def _orgnize_several_segments2(self):

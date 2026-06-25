@@ -72,7 +72,7 @@ def summary_detail_RL(path_to_record):
                                                 names=["vehicle_id", "enter_time", "leave_time"])
                 # [leave_time_origin, leave_time, enter_time, duration]
                 df_vehicle_inter['leave_time_origin'] = df_vehicle_inter['leave_time']
-                df_vehicle_inter['leave_time'].fillna(run_counts, inplace=True)  # Replace all nan values with the maximum number of steps per round
+                df_vehicle_inter.fillna({'leave_time': run_counts}, inplace=True)  # Replace all nan values with the maximum number of steps per round
                 df_vehicle_inter['duration'] = df_vehicle_inter["leave_time"].values - \
                                                 df_vehicle_inter["enter_time"].values
                 tmp_idx = []
@@ -90,10 +90,13 @@ def summary_detail_RL(path_to_record):
         if len(df_vehicle_all) == 0:
             print("============== There are no vehicles in the road network ==============")
             continue
-
+        
         df_vehicle_all = pd.concat(df_vehicle_all)
+        
+
         # calculate the duration through the entire network
         vehicle_duration = df_vehicle_all.groupby(by=['vehicle_id'])['duration'].sum()
+        
         ave_duration = vehicle_duration.mean()  # mean amomng all the vehicle
 
         duration_each_round_list.append(ave_duration)
@@ -210,7 +213,7 @@ def summary_detail_conventional(memo_cv):
 if __name__ == "__main__":
     """Only use these data"""
 
-    path_to_record = "records/DiffLight/Jinan/anon_3_4_jinan_real_2000.json/10_10_04_12_28"
+    path_to_record = "records/DiffLight_Block_INT/Hangzhou/anon_4_4_hangzhou_real.json/06_19_09_20_28"
     summary_detail_RL(path_to_record)
     # summary_detail_conventional(memo)
 
