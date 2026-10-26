@@ -70,6 +70,18 @@ def parse_args():
         "-unet", action="store_true", default=False, help="use the unet"
     )
     parser.add_argument("-sample_step", type=int, default=1, help="sample step")
+    parser.add_argument(
+        "-epochs",
+        type=int,
+        default=1,
+        help="training epochs per round",
+    )
+    parser.add_argument(
+        "-n_steps_per_epoch",
+        type=int,
+        default=1000,
+        help="optimizer steps in each training epoch",
+    )
 
     # missing pattern & rate
     parser.add_argument("-missing_pattern", type=str, default=None)
@@ -199,7 +211,8 @@ def main(in_args=None):
             "LEARNING_RATE": 2e-4,
             "BATCH_SIZE": 64 if template != "newyork_16_3" else 16,
             "NORMAL_FACTOR": -100 if template != "newyork_16_3" else -50,
-            "EPOCHS": 1,
+            "EPOCHS": in_args.epochs,
+            "N_STEPS_PER_EPOCH": in_args.n_steps_per_epoch,
             "BLOCK_DEPTH": 1,
             "DROP_DCM": in_args.drop_dcm,
             "DROP_NEIGHBOR": in_args.drop_neighbor,

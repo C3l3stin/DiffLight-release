@@ -13,7 +13,11 @@ from models.diffusion.spatial_temoral import STFormer
 from models.diffusion.temporal import TemporalUnet
 from models.diffusion.helpers import max_min_norm
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device(
+    "cuda:0" if torch.cuda.is_available()
+    else "mps" if torch.backends.mps.is_available()
+    else "cpu"
+)
 step_cnt = 0
 loss_dict = {}
 
@@ -38,6 +42,7 @@ class EMA():
 class DiffLightAgent(NetworkAgent):
     def __init__(self, dic_agent_conf, dic_traffic_env_conf, dic_path, cnt_round, intersection_id="0"):
         super(DiffLightAgent, self).__init__(dic_agent_conf, dic_traffic_env_conf, dic_path, cnt_round, intersection_id=intersection_id)
+        print(f"DiffLight device: {device}")
         
         # ema
         self.gradient_accumulate_every = 2
@@ -395,7 +400,8 @@ class DiffLightAgent(NetworkAgent):
             obs_mask_list = np.ones_like(rewards_list, dtype=np.int32)
 
         rewards_list = max_min_norm(rewards_list, self.bound["reward"][0], self.bound["reward"][1])
-
+        rewards_list = rewards_list * obs_mask_list
+        
         self.memory.push(states_list, actions_list, None, rewards_list, obs_mask_list)
 
 
@@ -471,12 +477,12 @@ class DiffLightAgent(NetworkAgent):
                 print(f'Step {step_cnt}: {loss:.4f} | {infos_str}')
 
                 loss_dict[step_cnt] = np.mean(step_loss)
-                # plot loss_dict
-                plt.figure()
-                plt.plot(loss_dict.keys(), loss_dict.values())
-                plt.title("loss")
-                plt.savefig(os.path.join(self.dic_path["PATH_TO_WORK_DIRECTORY"], "loss.png"))
-                plt.close()
+                if step_cnt % (self.log_freq * 100) == 0:
+                    plt.figure()
+                    plt.plot(loss_dict.keys(), loss_dict.values())
+                    plt.title("loss")
+                    plt.savefig(os.path.join(self.dic_path["PATH_TO_WORK_DIRECTORY"], "loss.png"))
+                    plt.close()
 
             step_cnt += 1
 

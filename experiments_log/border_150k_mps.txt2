@@ -1,0 +1,20 @@
+num_intersections: 16
+['anon_4_4_hangzhou_real.json']
+10_23_09_44_38
+round 0 starts
+==============  update network =============
+DiffLight device: mps
+Traceback (most recent call last):
+  File "/Users/celestin.gaboriau/Documents/TFE/Codes/Baselines/DiffLight-release/run_difflight.py", line 259, in <module>
+    main(args)
+  File "/Users/celestin.gaboriau/Documents/TFE/Codes/Baselines/DiffLight-release/run_difflight.py", line 235, in main
+    pipeline_wrapper(dic_agent_conf=deploy_dic_agent_conf,
+  File "/Users/celestin.gaboriau/Documents/TFE/Codes/Baselines/DiffLight-release/utils/utils.py", line 16, in pipeline_wrapper
+    ppl.run(multi_process=False)
+  File "/Users/celestin.gaboriau/Documents/TFE/Codes/Baselines/DiffLight-release/utils/pipeline.py", line 110, in run
+    updater_wrapper(cnt_round=cnt_round,
+  File "/Users/celestin.gaboriau/Documents/TFE/Codes/Baselines/DiffLight-release/utils/pipeline.py", line 53, in updater_wrapper
+    updater.load_sample_for_agents()
+  File "/Users/celestin.gaboriau/Documents/TFE/Codes/Baselines/DiffLight-release/utils/updater.py", line 32, in load_sample_for_agents
+    missing_pattern_file = open(os.path.join(self.dic_path["PATH_TO_MEMO"], pattern, "%s_%s.pkl" % (self.dic_traffic_env_conf["TRAFFIC_FILE"][:-5], pattern)), "rb")
+FileNotFoundError: [Errno 2] No such file or directory: 'memory/fourphase/border/anon_4_4_hangzhou_real_border.pkl'
