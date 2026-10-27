@@ -1,0 +1,2 @@
+model,intersections,horizon,sample_step,diffusion_steps,denoiser_calls,parameters_total,parameters_denoiser,parameters_inverse,gflops_decision_lower_bound,latency_ms,device,unet,drop_dcm,drop_prcd
+DiffLight,16,8,1,100,200,468294,460738,7556,262.239144384,706.9637369713746,cuda,False,False,False

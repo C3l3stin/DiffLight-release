@@ -1,0 +1,2 @@
+time,dataset,pattern,seed,memo,status,returncode,duration_s,log
+2026-10-27T01:08:54+01:00,hangzhou_1,kmrand0_2,0,DiffLight_hangzhou12_hangzhou_1_intersection_12_5_seed0,SUCCESS,0,51747.8,/srv/home/celestin.gaboriau/Documents/these/code/DiffLight-release/experiments_log/DiffLight_hangzhou12_hangzhou_1_intersection_12_5_seed0.log

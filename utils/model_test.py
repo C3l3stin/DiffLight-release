@@ -1,6 +1,7 @@
 from utils.config import DIC_AGENTS
 from copy import deepcopy
 from utils.cityflow_env import CityFlowEnv
+import csv
 import json
 import os
 import random
@@ -146,6 +147,12 @@ def test(model_dir, memo_dir, cnt_round, run_cnt, _dic_traffic_env_conf, agent_t
     
     state_buffer, reward_buffer, action_buffer, obs_mask_buffer = init_buffer(state, horizon, missing_pattern, missing_pattern_file_path)
     test_time = 0
+    # Reward réel de CityFlow (non masqué), puis sous-ensemble observable.
+    # Les deux moyennes sont calculées par couple (intersection, décision).
+    global_reward_sum = 0.0
+    global_reward_count = 0
+    observed_reward_sum = 0.0
+    observed_reward_count = 0
     with tqdm(total=int(total_time / dic_traffic_env_conf["MIN_ACTION_TIME"]), desc="test_simulate", leave=False) as pbar:
         while not done and step_num < int(total_time / dic_traffic_env_conf["MIN_ACTION_TIME"]):
             action_list = []
@@ -167,6 +174,22 @@ def test(model_dir, memo_dir, cnt_round, run_cnt, _dic_traffic_env_conf, agent_t
 
             state = next_state
             state_buffer, reward_buffer, action_buffer, obs_mask_buffer = update_buffer(state_buffer, reward_buffer, action_buffer, obs_mask_buffer, state, reward, action_list, missing_pattern)
+
+            # Le dernier élément du masque correspond à l'observation
+            # disponible après cette décision (même instant que le reward).
+            step_rewards = np.asarray(reward, dtype=np.float64)
+            step_observed = np.asarray(
+                [mask[-1] for mask in obs_mask_buffer], dtype=bool
+            )
+            if step_rewards.shape != step_observed.shape:
+                raise ValueError(
+                    "Dimensions reward/masque incompatibles : "
+                    f"{step_rewards.shape} != {step_observed.shape}"
+                )
+            global_reward_sum += float(step_rewards.sum())
+            global_reward_count += int(step_rewards.size)
+            observed_reward_sum += float(step_rewards[step_observed].sum())
+            observed_reward_count += int(step_observed.sum())
             step_num += 1
 
             pbar.update(1)
@@ -175,3 +198,40 @@ def test(model_dir, memo_dir, cnt_round, run_cnt, _dic_traffic_env_conf, agent_t
 
     env.batch_log_2()
     env.end_cityflow()
+
+    avg_reward_global = (
+        global_reward_sum / global_reward_count if global_reward_count else float("nan")
+    )
+    avg_reward_observed = (
+        observed_reward_sum / observed_reward_count if observed_reward_count else float("nan")
+    )
+    observed_fraction = (
+        observed_reward_count / global_reward_count if global_reward_count else float("nan")
+    )
+
+    # Un CSV propre à ce run, à côté des autres fichiers de suivi.
+    reward_csv = os.path.join(records_dir, "reward.csv")
+    fields = ["round", "optimizer_steps", "avg_reward_global",
+              "avg_reward_observed", "observed_fraction",
+              "global_count", "observed_count"]
+    has_header = os.path.exists(reward_csv) and os.path.getsize(reward_csv) > 0
+    with open(reward_csv, "a", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        if not has_header:
+            writer.writeheader()
+        writer.writerow({
+            "round": cnt_round,
+            "optimizer_steps": (cnt_round + 1) *
+                dic_agent_conf["EPOCHS"] * dic_agent_conf["N_STEPS_PER_EPOCH"],
+            "avg_reward_global": avg_reward_global,
+            "avg_reward_observed": avg_reward_observed,
+            "observed_fraction": observed_fraction,
+            "global_count": global_reward_count,
+            "observed_count": observed_reward_count,
+        })
+    print(
+        f"[evaluation reward] round={cnt_round} "
+        f"global={avg_reward_global:.4f}, observed={avg_reward_observed:.4f}, "
+        f"fraction_observed={observed_fraction:.2%}",
+        flush=True,
+    )

@@ -4,3 +4,4 @@ records/
 memory/
 *.pyc
 *.DS_Store
+*.log
