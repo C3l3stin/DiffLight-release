@@ -45,7 +45,7 @@ def parse_args():
     parser.add_argument(
         "-reward",
         type=float,
-        default=0.0,
+        default=1.0,
         help="the reward for the model to be achieved, 0.0 means the best reward",
     )
     parser.add_argument(
@@ -79,7 +79,7 @@ def parse_args():
     parser.add_argument(
         "-n_steps_per_epoch",
         type=int,
-        default=1000,
+        default=10000,
         help="optimizer steps in each training epoch",
     )
 

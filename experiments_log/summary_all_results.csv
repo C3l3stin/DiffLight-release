@@ -1,0 +1,17 @@
+memo,mask,mask_pct,seed,status,n_test_rounds,final5_duration_avg,final5_duration_std,final5_through_avg,vehicle_in,best_round,best_round_duration,last_round_duration,round0_duration,train_duration_h
+DiffLight_hangzhou12_hangzhou_1_intersection_12_5_seed0,kmrand0_2,12.5,0,SUCCESS,15.0,315.79,7.92,2909.6,2983.0,8.0,300.43,324.78,660.65,14.37
+DiffLight_hangzhou12_hangzhou_1_intersection_12_5_seed1,kmrand0_2,12.5,1,SUCCESS,15.0,298.84,2.77,2919.0,2983.0,10.0,295.98,301.06,829.48,15.32
+DiffLight_hangzhou12_hangzhou_1_intersection_12_5_seed2,kmrand0_2,12.5,2,SUCCESS,15.0,304.13,4.07,2911.0,2983.0,9.0,297.35,309.07,741.79,30.61
+DiffLight_hangzhou12_hangzhou_1_intersection_25_seed0,kmrand0_4,25.0,0,SUCCESS,15.0,314.08,6.81,2919.4,2983.0,14.0,306.45,306.45,568.2,17.0
+DiffLight_hangzhou12_hangzhou_1_intersection_25_seed1,kmrand0_4,25.0,1,SUCCESS,15.0,332.93,10.55,2903.6,2983.0,8.0,312.78,320.84,869.38,16.33
+DiffLight_hangzhou12_hangzhou_1_intersection_25_seed2,kmrand0_4,25.0,2,SUCCESS,15.0,311.96,6.17,2921.2,2983.0,10.0,306.02,307.51,816.05,18.95
+DiffLight_HZ1_KM_WN_25,km_wn,25.0,,SUCCESS,15.0,320.24,11.4,2929.0,2983.0,4.0,305.45,323.88,581.13,
+DiffLight_hangzhou12_hangzhou_1_intersection_50_seed0,kmrand0_8,50.0,0,SUCCESS,15.0,341.4,12.82,2907.6,2983.0,11.0,328.94,365.71,678.33,19.25
+DiffLight_hangzhou12_hangzhou_1_intersection_50_seed1,kmrand0_8,50.0,1,SUCCESS,15.0,328.85,3.88,2912.4,2983.0,9.0,321.93,328.36,714.74,19.23
+DiffLight_hangzhou12_hangzhou_1_intersection_50_seed2,kmrand0_8,50.0,2,RUNNING,,,,,,,,,,
+MEAN_mask12.5,kmrand0_2,12.5,MEAN,n=3,,306.25,,2913.2,,,297.92,311.64,,20.1
+STD_mask12.5,kmrand0_2,12.5,STD,n=3,,7.08,,4.14,,,1.86,9.85,,7.44
+MEAN_mask25.0,kmrand0_4,25.0,MEAN,n=3,,319.66,,2914.73,,,308.42,311.6,,17.43
+STD_mask25.0,kmrand0_4,25.0,STD,n=3,,9.43,,7.91,,,3.09,6.55,,1.11
+MEAN_mask50.0,kmrand0_8,50.0,MEAN,n=2,,335.12,,2910.0,,,325.44,347.03,,19.24
+STD_mask50.0,kmrand0_8,50.0,STD,n=2,,6.27,,2.4,,,3.5,18.67,,0.01
